@@ -33,12 +33,33 @@ X 的「暂停话题推送」面板（「为你推荐」右侧小箭头）里勾
 
 ## 安装
 
-1. 安装 [Tampermonkey](https://www.tampermonkey.net/)（或 Violentmonkey）
-2. 打开 [x-snooze-guard.user.js](./x-snooze-guard.user.js) 的原始文件地址，Tampermonkey 会提示安装
-3. 打开 x.com，点「为你推荐」右侧箭头，在面板底部看到「自动续期」即成功
+先安装 [Tampermonkey](https://www.tampermonkey.net/)（或 Violentmonkey）。
 
-Chrome 需要给 Tampermonkey 授权 x.com：
-`chrome://extensions` → 篡改猴 → 详情 → 网站访问 → 「在特定网站上」并添加 `https://x.com/*`
+### 方式一：复制粘贴（不需要额外授权，推荐）
+
+1. 打开 [x-snooze-guard.user.js](./x-snooze-guard.user.js)，点右上角 **Raw**，全选复制
+2. 点 Tampermonkey 图标 → 管理面板 → **+** 新建脚本
+3. 清空模板内容，粘贴刚才复制的代码
+4. Ctrl+S 保存
+
+### 方式二：点链接自动安装（需要先给扩展授权）
+
+Tampermonkey 只会拦截它**有权限访问的站点**上的 `.user.js`。
+如果点 raw 链接看到的是纯文本源码而不是安装页，就是这个原因。
+
+授权方法：`chrome://extensions` → 篡改猴 → 详情 → 网站访问 → 「在特定网站上」→ 添加：
+
+- `https://github.com/*`
+- `https://raw.githubusercontent.com/*`
+
+之后点这个链接会弹出安装页：
+<https://github.com/yayoinoyume/x-snooze-guard/raw/main/x-snooze-guard.user.js>
+
+### 最后一步（两种方式都要）
+
+给 Tampermonkey 授权 x.com：`chrome://extensions` → 篡改猴 → 详情 → 网站访问 → 「在特定网站上」并添加 `https://x.com/*`
+
+然后打开 x.com，点「为你推荐」右侧箭头，在面板底部看到「自动续期」即成功。
 
 ## 原理
 

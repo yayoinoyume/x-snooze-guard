@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         X 暂停话题推送 · 自动续期
 // @namespace    pi.x-snooze-guard
-// @version      0.5.1
+// @version      0.6.0
 // @description  在 X 原生「暂停话题推送」面板里加一个自动续期开关，让勾选的话题到期前自动续上 24 小时
 // @match        https://x.com/*
 // @match        https://twitter.com/*
@@ -157,12 +157,18 @@
     txt.appendChild(t1);
     txt.appendChild(t2);
 
+    // mirrors X's native switch metrics: 40x20 hit area, 40x14 track, 20x20 knob
     var sw = document.createElement('div');
     sw.id = 'xsg-toggle';
     sw.setAttribute('role', 'switch');
-    sw.style.cssText = 'flex:none;width:40px;height:20px;border-radius:10px;position:relative;cursor:pointer;transition:background .15s;';
+    sw.style.cssText = 'flex:none;width:40px;height:20px;position:relative;cursor:pointer;';
+    var track = document.createElement('div');
+    track.id = 'xsg-track';
+    track.style.cssText = 'position:absolute;left:0;top:3px;width:40px;height:14px;border-radius:10px;border:0.667px solid transparent;transition:background-color .1s;';
     var knob = document.createElement('div');
-    knob.style.cssText = 'position:absolute;top:0;left:0;width:20px;height:20px;border-radius:50%;background:#fafafa;transition:left .15s;box-shadow:0 1px 2px rgba(0,0,0,.35);';
+    knob.id = 'xsg-knob';
+    knob.style.cssText = 'position:absolute;top:0;left:0;width:20px;height:20px;border-radius:100%;border:0.667px solid transparent;box-shadow:0 1px 3px rgba(0,0,0,.5);transition:left .1s,background-color .1s;';
+    sw.appendChild(track);
     sw.appendChild(knob);
 
     row.appendChild(txt);
@@ -189,13 +195,15 @@
     var el = state.injectedEl;
     if (!el) return;
     var sw = el.querySelector('#xsg-toggle');
-    var knob = sw && sw.firstElementChild;
+    var track = el.querySelector('#xsg-track');
+    var knob = el.querySelector('#xsg-knob');
     var stat = el.querySelector('#xsg-stat');
-    if (sw) {
-      sw.style.background = state.auto ? '#1d9bf0' : '#536471';
-      sw.setAttribute('aria-checked', state.auto ? 'true' : 'false');
+    if (sw) sw.setAttribute('aria-checked', state.auto ? 'true' : 'false');
+    if (track) track.style.backgroundColor = state.auto ? '#6bc9fb' : '#939393';
+    if (knob) {
+      knob.style.left = state.auto ? '20px' : '0px';
+      knob.style.backgroundColor = state.auto ? '#1d9bf0' : '#fafafa';
     }
-    if (knob) knob.style.left = state.auto ? '20px' : '0px';
     var tags = (state.filters.value && state.filters.value.snoozedTags) || {};
     var known = loadKnown();
     if (stat) {
